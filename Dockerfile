@@ -20,14 +20,6 @@ RUN sudo wget https://golang.org/dl/go1.15.5.linux-amd64.tar.gz -P /usr/src/loca
     export PATH=$PATH:/usr/local/go/bin && \
     source ~/.bashrc
 
-# Setting up Redis
-sed -i "s/DAEMON_ARGS\=\/etc\/redis\/redis.conf/DAEMON_ARGS\=\/dnif\/redis\/conf\/redis.conf/g" /etc/init.d/redis-server
-MEM_TOTAL="$(grep 'MemTotal' /proc/meminfo | awk '{print $2}' |  xargs -I {} echo 'scale=0; {}*0.8/1024' | bc)"
-MEM_TOTAL="${MEM_TOTAL}mb"
-sed -i 's/# maxmemory <bytes>/maxmemory '"$MEM_TOTAL"'/g' /etc/redis/redis.conf
-service redis-server start
-
-
 # Installing subfinder
 RUN GO111MODULE=on go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
 

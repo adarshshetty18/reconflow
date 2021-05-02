@@ -1,0 +1,10 @@
+version: '2.0'
+services:
+  reconflow:
+    image: reconflow:v1.0
+    network_mode: 'host'
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /reconflow:/reconflow
+    container_name: reconflow

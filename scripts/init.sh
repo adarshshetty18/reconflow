@@ -14,5 +14,5 @@ MEM_TOTAL="${MEM_TOTAL}mb"
 sed -i 's/# maxmemory <bytes>/maxmemory '"$MEM_TOTAL"'/g' /etc/redis/redis.conf
 service redis-server start
 
-figlet "Reconflow initiated successfully!!"
+figlet "Reconflow initiated successfully!"
 supervisord

@@ -32,4 +32,8 @@ RUN GO111MODULE=on go get -v github.com/projectdiscovery/httpx/cmd/httpx
 # Installing FFUF
 RUN GO111MODULE=on go get -v github.com/ffuf/ffuf
 
+# Copying scripts
+ADD scripts/init.sh /opt/
+ADD scripts/RF.conf /etc/supervisor/conf.d/
+
 ENTRYPOINT ["bash", "/opt/init.sh"]

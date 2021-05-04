@@ -8,7 +8,6 @@ if [[ ! -e /reconflow/conf ]]; then
 fi
 
 # Setting up Redis
-sed -i "s/DAEMON_ARGS\=\/etc\/redis\/redis.conf/DAEMON_ARGS\=\/dnif\/redis\/conf\/redis.conf/g" /etc/init.d/redis-server
 MEM_TOTAL="$(grep 'MemTotal' /proc/meminfo | awk '{print $2}' |  xargs -I {} echo 'scale=0; {}*0.8/1024' | bc)"
 MEM_TOTAL="${MEM_TOTAL}mb"
 sed -i 's/# maxmemory <bytes>/maxmemory '"$MEM_TOTAL"'/g' /etc/redis/redis.conf

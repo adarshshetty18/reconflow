@@ -5,7 +5,8 @@ RUN echo "deb-src http://ap-south-1.ec2.archive.ubuntu.com/ubuntu/ xenial main r
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN apt-get update \
-  && apt-get install -y python3-pip python3-dev libpcap-dev supervisor redis-server wget software-properties-common\
+  && apt-get install -y python3-pip python3-dev libpcap-dev supervisor redis-server wget software-properties-common \
+  figlet bc \
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
   && pip3 --no-cache-dir install --upgrade pip \
@@ -33,6 +34,11 @@ RUN GO111MODULE=on go get -v github.com/ffuf/ffuf
 
 # Copying scripts
 ADD scripts/init.sh /opt/
+ADD scripts/supervisor.conf /etc/supervisor/
 ADD scripts/RF.conf /etc/supervisor/conf.d/
+
+# Installing python dependencies
+COPY scripts/requirements.txt /opt/
+RUN pip3 install -r /opt/requirements.txt
 
 ENTRYPOINT ["bash", "/opt/init.sh"]

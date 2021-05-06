@@ -6,7 +6,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 RUN apt-get update \
   && apt-get install -y python3-pip python3-dev libpcap-dev supervisor redis-server wget software-properties-common \
-  figlet bc \
+  figlet bc vim python3\
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
   && pip3 --no-cache-dir install --upgrade pip \

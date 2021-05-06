@@ -14,4 +14,4 @@ sed -i 's/# maxmemory <bytes>/maxmemory '"$MEM_TOTAL"'/g' /etc/redis/redis.conf
 service redis-server start
 
 figlet "Reconflow initiated successfully!"
-supervisord
+supervisord -n

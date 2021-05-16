@@ -5,6 +5,9 @@ import logging
 
 sys.path.append("/usr/src/reconflow/")
 from workers.subdomains import Subdomains
+from workers.livedomains import Livedomains
+from workers.ports import Ports
+from workers.directories import Directories
 
 BROKER_URL = "redis://localhost:6379"
 
@@ -15,6 +18,9 @@ app.conf['task_queues'] = (
 app.conf['result_expires'] = 60*10
 
 app.tasks.register(Subdomains())
+app.tasks.register(Livedomains())
+app.tasks.register(Ports())
+app.tasks.register(Directories())
 
 if __name__ == "__main__":
     logging.info('Initializing worker')

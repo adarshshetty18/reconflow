@@ -1,8 +1,11 @@
 from celery import Task
+import os
 
 
 class Subdomains(Task):
     name = 'core.subdomains'
 
     def run(self, *args, **kwargs):
-        pass
+        domain = args[0]
+        os.popen(f"subfinder -d {domain} -o /reconflow/subdomains/{domain}.txt").read()
+        return domain

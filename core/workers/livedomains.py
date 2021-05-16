@@ -3,7 +3,7 @@ import os
 
 
 class Livedomains(Task):
-    name = 'core.subdomains'
+    name = 'core.livedomains'
 
     def run(self, *args, **kwargs):
         domain = args[0]

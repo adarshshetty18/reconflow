@@ -7,6 +7,6 @@ class Ports(Task):
 
     def run(self, *args, **kwargs):
         domain = args[0]
-        os.popen(f"cat /reconflow/livedomains/{domain}.txt |naabu -silent | tee /reconflow/ports/{domain}.txt")\
+        os.popen(f"echo {domain} | naabu -nmap-cli 'nmap -sV -oX naabu-output' | tee /reconflow/ports/{domain}.txt")\
             .read()
         return domain

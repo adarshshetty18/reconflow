@@ -12,9 +12,6 @@ RUN apt-get update \
   && pip3 --no-cache-dir install --upgrade pip \
   && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /usr/src/reconflow
-COPY core /usr/src/reconflow
-
 # Installing go
 RUN add-apt-repository -y ppa:longsleep/golang-backports && \
     apt-get update && \
@@ -31,6 +28,10 @@ RUN GO111MODULE=on go get -v github.com/projectdiscovery/httpx/cmd/httpx
 
 # Installing FFUF
 RUN GO111MODULE=on go get -v github.com/ffuf/ffuf
+
+# Moving code
+RUN mkdir -p /usr/src/reconflow
+COPY core /usr/src/reconflow
 
 # Copying scripts
 ADD scripts/init.sh /opt/

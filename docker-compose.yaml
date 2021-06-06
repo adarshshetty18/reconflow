@@ -8,3 +8,5 @@ services:
     volumes:
       - /reconflow:/reconflow
     container_name: reconflow
+    environment:
+      - 'TELEGRAM_BOT_TOKEN=xxx.xxx.xxx.xxx'

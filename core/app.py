@@ -53,9 +53,13 @@ def echo(update, context):
 
     res = chain(sig_list).apply_async()
     domain = res.get()
+    update.message.reply_text(f"Here is the subdomains report for {domain}:")
     update.message.reply_document(open(f"/reconflow/subdomains/{domain}_sdomains.txt", 'rb'))
-    update.message.reply_document(open(f"/reconflow/livedomains/{domain}_domains.txt", 'rb'))
+    update.message.reply_text(f"Here is the livedomains report for {domain}:")
+    update.message.reply_document(open(f"/reconflow/livedomains/{domain}_ldomains.txt", 'rb'))
+    update.message.reply_text(f"Here is the ports report for {domain}:")
     update.message.reply_document(open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
+    update.message.reply_text(f"Here is the directories report for {domain}:")
     update.message.reply_document(open(f"/reconflow/directories/{domain}_dirs.txt", 'rb'))
 
 

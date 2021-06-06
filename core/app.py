@@ -60,7 +60,7 @@ def echo(update, context):
     update.message.reply_text(f"Here is the ports report for {domain}:")
     update.message.reply_document(open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
     update.message.reply_text(f"Here is the directories report for {domain}:")
-    update.message.reply_document(open(f"/reconflow/directories/{domain}_dirs.txt", 'rb'))
+    update.message.reply_document(open(f"/reconflow/directories/{domain}_dirs.json", 'rb'))
 
 
 def error(update, context):

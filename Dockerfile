@@ -9,16 +9,16 @@ ENV PATH /go/bin:$PATH
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 # Installing subfinder
-RUN go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+RUN GO111MODULE=on go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
 
 # Installing naabu
-RUN go get -v github.com/projectdiscovery/naabu/v2/cmd/naabu
+RUN GO111MODULE=on go get -v github.com/projectdiscovery/naabu/v2/cmd/naabu
 
 # Installing httpx
-RUN go get -v github.com/projectdiscovery/httpx/cmd/httpx
+RUN GO111MODULE=on go get -v github.com/projectdiscovery/httpx/cmd/httpx
 
 # Installing FFUF
-RUN go get -v github.com/ffuf/ffuf
+RUN GO111MODULE=on go get -v github.com/ffuf/ffuf
 
 # Moving code
 RUN mkdir -p /usr/src/reconflow

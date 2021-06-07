@@ -27,9 +27,6 @@ fi
 MEM_TOTAL="$(grep 'MemTotal' /proc/meminfo | awk '{print $2}' |  xargs -I {} echo 'scale=0; {}*0.8/1024' | bc)"
 MEM_TOTAL="${MEM_TOTAL}mb"
 sed -i 's/# maxmemory <bytes>/maxmemory '"$MEM_TOTAL"'/g' /etc/redis.conf
-service redis-server start
-export PATH=$PATH:/root/go/bin:/usr/src/reconflow/jobs/
-source ~/.bashrc
 
-figlet "Reconflow initiated successfully!"
+echo "Reconflow initiated successfully!"
 supervisord -n

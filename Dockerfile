@@ -5,7 +5,7 @@ RUN apk add --update --no-cache git make musl-dev go redis supervisor libpcap-de
 # Configure Go
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
-ENV PATH /go/bin:$PATH
+ENV PATH /go/bin:/usr/src/reconflow/jobs/:$PATH
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 # Installing subfinder

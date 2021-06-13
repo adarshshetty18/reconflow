@@ -1,5 +1,7 @@
 from celery import Task
 import os
+from telegram.ext import Updater
+TOKEN = os.environ["TOKEN"]
 
 
 class Subdomains(Task):
@@ -7,8 +9,9 @@ class Subdomains(Task):
 
     def run(self, *args, **kwargs):
         domain = args[0]
-        update = args[1]
+        chat_id = args[1]
+        updater = Updater(TOKEN, use_context=True)
         os.popen(f"subfinder -d {domain} -o /reconflow/subdomains/{domain}_sdomains.txt").read()
-        update.reply_text(f"Here is the subdomains report for {domain}:")
-        update.reply_document(open(f"/reconflow/subdomains/{domain}_sdomains.txt", 'rb'))
+        updater.bot.send_message(chat_id=chat_id, text=f"Here is the subdomains report for {domain}:")
+        updater.bot.send_document(chat_id=chat_id, document=open(f"/reconflow/subdomains/{domain}_sdomains.txt", 'rb'))
         return domain

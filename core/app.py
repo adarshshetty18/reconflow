@@ -38,19 +38,18 @@ def help(update, context):
 @send_typing_action
 def echo(update, context):
     chat_id = update.message.chat.id
-    bot_obj = context.bot
     sig_list = []
     sub_sig = capp.signature('core.subdomains', debug=True,
-                             args=[update.message.text, bot_obj, chat_id]).set(queue='core')
+                             args=[update.message.text, chat_id]).set(queue='core')
     sig_list.append(sub_sig)
 
-    live_sig = capp.signature('core.livedomains', debug=True, args=[bot_obj, chat_id]).set(queue='core')
+    live_sig = capp.signature('core.livedomains', debug=True, args=[chat_id]).set(queue='core')
     sig_list.append(live_sig)
 
-    ports_sig = capp.signature('core.ports', debug=True, args=[bot_obj, chat_id]).set(queue='core')
+    ports_sig = capp.signature('core.ports', debug=True, args=[chat_id]).set(queue='core')
     sig_list.append(ports_sig)
 
-    dir_sig = capp.signature('core.directories', debug=True, args=[bot_obj, chat_id]).set(queue='core')
+    dir_sig = capp.signature('core.directories', debug=True, args=[chat_id]).set(queue='core')
     sig_list.append(dir_sig)
 
     chain(sig_list).apply_async()

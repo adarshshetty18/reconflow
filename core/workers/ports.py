@@ -1,5 +1,7 @@
 from celery import Task
 import os
+from telegram.ext import Updater
+TOKEN = os.environ["TOKEN"]
 
 
 class Ports(Task):
@@ -7,10 +9,10 @@ class Ports(Task):
 
     def run(self, *args, **kwargs):
         domain = args[0]
-        bot = args[1]
-        chat_id = args[2]
+        chat_id = args[1]
+        updater = Updater(TOKEN, use_context=True)
         os.popen(f"echo {domain} | naabu -nmap-cli 'nmap -sV -oX naabu-output' | tee /reconflow/ports/{domain}_ports.txt")\
             .read()
-        bot.send_message(chat_id=chat_id, text=f"Here is the ports report for {domain}:")
-        bot.send_document(chat_id=chat_id, document=open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
+        updater.bot.send_message(chat_id=chat_id, text=f"Here is the ports report for {domain}:")
+        updater.bot.send_document(chat_id=chat_id, document=open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
         return domain

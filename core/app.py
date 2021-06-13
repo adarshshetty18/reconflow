@@ -38,29 +38,20 @@ def help(update, context):
 @send_typing_action
 def echo(update, context):
     sig_list = []
-    sub_sig = capp.signature('core.subdomains', debug=True, args=[update.message.text]).set(queue='core')
+    sub_sig = capp.signature('core.subdomains', debug=True, args=[update.message.text, update]).set(queue='core')
     sig_list.append(sub_sig)
 
-    live_sig = capp.signature('core.livedomains', debug=True, args=[]).set(queue='core')
+    live_sig = capp.signature('core.livedomains', debug=True, args=[update]).set(queue='core')
     sig_list.append(live_sig)
 
-    ports_sig = capp.signature('core.ports', debug=True, args=[]).set(queue='core')
+    ports_sig = capp.signature('core.ports', debug=True, args=[update]).set(queue='core')
     sig_list.append(ports_sig)
 
-    dir_sig = capp.signature('core.directories', debug=True, args=[]).set(queue='core')
+    dir_sig = capp.signature('core.directories', debug=True, args=[update]).set(queue='core')
     sig_list.append(dir_sig)
-    update.message.reply_text(f"Report for domain {update.message.text} will be sent soon!")
 
-    res = chain(sig_list).apply_async()
-    domain = res.get()
-    update.message.reply_text(f"Here is the subdomains report for {domain}:")
-    update.message.reply_document(open(f"/reconflow/subdomains/{domain}_sdomains.txt", 'rb'))
-    update.message.reply_text(f"Here is the livedomains report for {domain}:")
-    update.message.reply_document(open(f"/reconflow/livedomains/{domain}_ldomains.txt", 'rb'))
-    update.message.reply_text(f"Here is the ports report for {domain}:")
-    update.message.reply_document(open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
-    update.message.reply_text(f"Here is the directories report for {domain}:")
-    update.message.reply_document(open(f"/reconflow/directories/{domain}_dirs.json", 'rb'))
+    chain(sig_list).apply_async()
+    update.message.reply_text(f"Report for domain {update.message.text} will be sent soon!")
 
 
 def error(update, context):

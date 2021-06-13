@@ -37,17 +37,18 @@ def help(update, context):
 
 @send_typing_action
 def echo(update, context):
+    update_obj = update.message
     sig_list = []
-    sub_sig = capp.signature('core.subdomains', debug=True, args=[update.message.text, update]).set(queue='core')
+    sub_sig = capp.signature('core.subdomains', debug=True, args=[update.message.text, update_obj]).set(queue='core')
     sig_list.append(sub_sig)
 
-    live_sig = capp.signature('core.livedomains', debug=True, args=[update]).set(queue='core')
+    live_sig = capp.signature('core.livedomains', debug=True, args=[update_obj]).set(queue='core')
     sig_list.append(live_sig)
 
-    ports_sig = capp.signature('core.ports', debug=True, args=[update]).set(queue='core')
+    ports_sig = capp.signature('core.ports', debug=True, args=[update_obj]).set(queue='core')
     sig_list.append(ports_sig)
 
-    dir_sig = capp.signature('core.directories', debug=True, args=[update]).set(queue='core')
+    dir_sig = capp.signature('core.directories', debug=True, args=[update_obj]).set(queue='core')
     sig_list.append(dir_sig)
 
     chain(sig_list).apply_async()

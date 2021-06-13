@@ -10,6 +10,6 @@ class Ports(Task):
         update = args[1]
         os.popen(f"echo {domain} | naabu -nmap-cli 'nmap -sV -oX naabu-output' | tee /reconflow/ports/{domain}_ports.txt")\
             .read()
-        update.message.reply_text(f"Here is the ports report for {domain}:")
-        update.message.reply_document(open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
+        update.reply_text(f"Here is the ports report for {domain}:")
+        update.reply_document(open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
         return domain

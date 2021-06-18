@@ -13,6 +13,6 @@ class Livedomains(Task):
         updater = Updater(TOKEN, use_context=True)
         os.popen(f"cat /reconflow/subdomains/{domain}_sdomains.txt | httpx -silent | tee /reconflow/livedomains/{domain}_ldomains.txt")\
             .read()
-        updater.bot.send_message(chat_id=chat_id, text=f"Here is the livedomains report for {domain}:")
-        updater.bot.send_document(chat_id=chat_id, document=open(f"/reconflow/livedomains/{domain}_ldomains.txt", 'rb'))
+        updater.bot.send_document(chat_id=chat_id, caption=f"Here is the livedomains report for {domain}:",
+                                  document=open(f"/reconflow/livedomains/{domain}_ldomains.txt", 'rb'))
         return domain

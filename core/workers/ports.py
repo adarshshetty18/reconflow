@@ -13,6 +13,6 @@ class Ports(Task):
         updater = Updater(TOKEN, use_context=True)
         os.popen(f"echo {domain} | naabu -nmap-cli 'nmap -sV -oX naabu-output' | tee /reconflow/ports/{domain}_ports.txt")\
             .read()
-        updater.bot.send_message(chat_id=chat_id, text=f"Here is the ports report for {domain}:")
-        updater.bot.send_document(chat_id=chat_id, document=open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
+        updater.bot.send_document(chat_id=chat_id, caption=f"Here is the ports report for {domain}:",
+                                  document=open(f"/reconflow/ports/{domain}_ports.txt", 'rb'))
         return domain

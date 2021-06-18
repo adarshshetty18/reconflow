@@ -2,3 +2,4 @@ celery
 redis
 python-telegram-bot
 flask
+validators

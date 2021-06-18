@@ -6,6 +6,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import ChatAction
 from celery import Celery
 from celery import chain
+import validators
 capp = Celery(broker="redis://localhost:6379", backend="redis://localhost:6379")
 capp.conf['result_expires'] = 60*10
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -39,21 +40,25 @@ def help(update, context):
 def echo(update, context):
     chat_id = update.message.chat.id
     sig_list = []
-    sub_sig = capp.signature('core.subdomains', debug=True,
-                             args=[update.message.text, chat_id]).set(queue='core')
-    sig_list.append(sub_sig)
+    domain = update.message.text
+    if validators.domain(domain):
+        sub_sig = capp.signature('core.subdomains', debug=True,
+                                 args=[domain, chat_id]).set(queue='core')
+        sig_list.append(sub_sig)
 
-    live_sig = capp.signature('core.livedomains', debug=True, args=[chat_id]).set(queue='core')
-    sig_list.append(live_sig)
+        live_sig = capp.signature('core.livedomains', debug=True, args=[chat_id]).set(queue='core')
+        sig_list.append(live_sig)
 
-    ports_sig = capp.signature('core.ports', debug=True, args=[chat_id]).set(queue='core')
-    sig_list.append(ports_sig)
+        ports_sig = capp.signature('core.ports', debug=True, args=[chat_id]).set(queue='core')
+        sig_list.append(ports_sig)
 
-    dir_sig = capp.signature('core.directories', debug=True, args=[chat_id]).set(queue='core')
-    sig_list.append(dir_sig)
+        dir_sig = capp.signature('core.directories', debug=True, args=[chat_id]).set(queue='core')
+        sig_list.append(dir_sig)
 
-    chain(sig_list).apply_async()
-    update.message.reply_text(f"Report for domain {update.message.text} will be sent soon!")
+        chain(sig_list).apply_async()
+        update.message.reply_text(f"Report for domain {domain} will be sent soon!")
+    else:
+        update.message.reply_text(f"Use a valid domain name without http:// or https:// & try again!")
 
 
 def error(update, context):
@@ -63,7 +68,6 @@ def error(update, context):
 
 def main():
     updater = Updater(TOKEN, use_context=True)
-    print(TOKEN)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))

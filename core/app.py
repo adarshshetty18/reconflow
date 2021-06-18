@@ -19,8 +19,7 @@ DOMAIN, CHOOSING = range(2)
 reply_keyboard = [
     ['Subdomain Enummeration', 'Livedomain Enumeration'],
     ['Port Scanning', 'Directory Bruteforcing'],
-    ['Run all the phases'],
-    ['Cancel']
+    ['Run all the phases']
 ]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
@@ -38,14 +37,9 @@ def send_typing_action(func):
 
 def start(update, context):
     """Send a message when the command /start is issued."""
-    message = """
-              Hello I'm the ReconFlow bot. I would be more than happy to serve you.
-              To proceed please enter a valid domain name.  
-              """
+    message = "Hey, I'm ReconFlowBot 🤖\nI would be more than happy to serve you ❤️" \
+              "\nTo proceed please enter a valid domain name 🧐."
     update.message.reply_text(message)
-    user_data = context.user_data
-    user_data['domain'] = update.message.text
-    del user_data['choice']
     return DOMAIN
 
 
@@ -54,21 +48,15 @@ def help(update, context):
     update.message.reply_text('Use /start command to use reconflow')
 
 
-def cancel(update: Update, context: CallbackContext) -> int:
-    update.message.reply_text(
-        f"Thank you for using ReconFlow. See you around!",
-        reply_markup=ReplyKeyboardRemove(),
-    )
-    return ConversationHandler.END
-
-
-def domain(update, context):
+def get_domain(update, context):
     domain = update.message.text
     if validators.domain(domain):
         message = """
                   Which phase do you want the report for?
                   """
         update.message.reply_text(message, reply_markup=markup)
+        user_data = context.user_data
+        user_data['domain'] = domain
         return CHOOSING
     else:
         update.message.reply_text(f"Use a valid domain name without http:// or https:// & try again!",
@@ -78,7 +66,7 @@ def domain(update, context):
 
 
 @send_typing_action
-def choice(update, context):
+def choosing(update, context):
     chat_id = update.message.chat.id
     user_data = context.user_data
     domain = user_data["domain"]
@@ -129,7 +117,7 @@ def choice(update, context):
         sig_list.append(ports_sig)
 
         chain(sig_list).apply_async()
-        update.message.reply_text(f"Subdomain Enummeration Report for domain {domain} will be sent soon!")
+        update.message.reply_text(f"Port Scanning Report for domain {domain} will be sent soon!")
     elif choice == "Directory Bruteforcing":
         sig_list = []
         sub_sig = capp.signature('core.subdomains', debug=True,
@@ -143,7 +131,8 @@ def choice(update, context):
         sig_list.append(dir_sig)
 
         chain(sig_list).apply_async()
-        update.message.reply_text(f"Subdomain Enummeration Report for domain {domain} will be sent soon!")
+        update.message.reply_text(f"Directory Bruteforcing Report for domain {domain} will be sent soon!")
+    return ConversationHandler.END
 
 
 def error(update, context):
@@ -158,15 +147,14 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            DOMAIN: [MessageHandler(Filters.text, domain)],
+            DOMAIN: [MessageHandler(Filters.text, get_domain)],
             CHOOSING: [MessageHandler(
                     Filters.regex('^(Subdomain Enummeration|Livedomain Enumeration|Port Scanning|'
-                                  'Directory Bruteforcing|Run all the phases)$'), choice
+                                  'Directory Bruteforcing|Run all the phases)$'), choosing
                 )],
         },
 
-        fallbacks=[CommandHandler('cancel', cancel),
-                   CommandHandler('help', help)]
+        fallbacks=[CommandHandler('help', help)]
     )
     dp.add_handler(conv_handler)
     dp.add_error_handler(error)

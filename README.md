@@ -1,12 +1,20 @@
 # RECONFLOW
-Reconflow is all in one tool for gathering reconnaissance information about a target in a penetration test.
+Reconflow is all in one tool for gathering reconnaissance information about a target without the hassle of installing multiple tools and their dependencies & also presents you the results to your telegram chat.
+
+### Tools used
+1. [Subfinder](https://github.com/projectdiscovery/subfinder) for subdomain enumeration.
+2. [Httpx](https://github.com/projectdiscovery/httpx) for finding livedomains.
+3. [Naabu](https://github.com/projectdiscovery/naabu) for scanning ports.
+4. [FFUF](https://github.com/ffuf/ffuf) for bruteforcing directories.
+
+### Docker Repository
+https://hub.docker.com/r/adarshshetty/reconflow
 
 ### Pre-requisites
 - [Docker Engine](https://docs.docker.com/engine/install/)
 - [docker-compose](https://docs.docker.com/compose/install/)
 
 ### How to install
-
 1. Create a [telegram bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot) & copy the bot token.
 1. Download the docker-compose file
    ```
@@ -23,4 +31,3 @@ Reconflow is all in one tool for gathering reconnaissance information about a ta
    ```
    /start
    ```
-
